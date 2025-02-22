@@ -6,6 +6,8 @@ Créer une application mobile simple (iOS/Android) permettant aux utilisateurs d
 Signaler des besoins urgents (ex. sans-abri, collectes alimentaires, urgences sociales).
 Visualiser ces besoins sur une carte interactive en temps réel.
 Coordonner l'entraide entre citoyens et associations.
+
+
 2. Fonctionnalités Prioritaires
 A. Carte Interactive (Fonctionnalité Principale)
 Architecture Technique et Flux de Données :
@@ -13,7 +15,8 @@ Architecture Technique et Flux de Données :
 Sources de données :
 Signalements utilisateurs géolocalisés.
 Bases de données ouvertes (mairies, associations telles que les Restos du Cœur).
-Capteurs IoT (ex. distributeurs de nourriture connectés).
+
+
 Synchronisation :
 Mise à jour des données toutes les 30 secondes via WebSocket ou Firebase Realtime Database.
 Composants Clés :
