@@ -122,11 +122,11 @@ Note : Cette phase sera reportée car elle nécessite une infrastructure serveur
 ## Notes de Développement
 
 ### Stack Technique
-- Frontend : React Native avec TypeScript
-- Base de données locale : SQLite (@react-native-sqlite-storage)
+- Frontend : Expo (React Native) avec TypeScript
+- Base de données locale : SQLite (expo-sqlite)
 - Cartographie : react-native-maps
-- Tests : Jest, React Native Testing Library
-- Stockage local : AsyncStorage pour les préférences, SQLite pour les données
+- Tests : Jest
+- Stockage local : AsyncStorage (@react-native-async-storage/async-storage)
 
 ### Architecture de la Base de Données SQLite
 Tables principales :
@@ -150,22 +150,29 @@ Tables principales :
    - created_by (FOREIGN KEY -> users.id)
 
 ### Prochaines étapes
-1. Installation des dépendances :
+1. Configuration initiale :
    ```bash
-   npm install @react-native-sqlite-storage @react-native-async-storage/async-storage
+   # Installation d'Expo
+   npm install -g expo-cli
+   
+   # Création du projet
+   npx create-expo-app -t expo-template-typescript
+   
+   # Installation des dépendances
+   npx expo install expo-sqlite @react-navigation/native @react-navigation/native-stack @react-navigation/bottom-tabs react-native-maps expo-location @react-native-async-storage/async-storage react-native-screens react-native-safe-area-context
    ```
 
 2. Création des services :
-   - DatabaseService : Gestion de SQLite
+   - DatabaseService : Gestion de SQLite (expo-sqlite)
    - AuthService : Gestion de l'authentification locale
    - NeedService : Gestion des besoins
-   - StorageService : Gestion du stockage local (images, etc.)
+   - LocationService : Gestion de la géolocalisation (expo-location)
 
-3. Implémentation des fonctionnalités de base :
-   - Création de compte local
-   - Authentification locale
-   - CRUD des besoins
-   - Stockage local des images
+3. Migration du code existant :
+   - Adapter les composants pour Expo
+   - Mettre à jour les imports
+   - Configurer la navigation
+   - Adapter la carte pour utiliser expo-location
 
 ## Journal des Modifications
 
@@ -177,4 +184,5 @@ Tables principales :
 | $(date) | Création des écrans de base | 🟢 |
 | $(date) | Installation des dépendances principales | 🟢 |
 | $(date) | Implémentation de la carte interactive et création de besoins | 🟢 |
-| $(date) | Changement de Firebase vers SQLite pour simplicité | 🟢 | 
+| $(date) | Changement de Firebase vers SQLite pour simplicité | 🟢 |
+| $(date) | Migration vers Expo pour faciliter le développement | 🟡 | 
