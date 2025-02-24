@@ -119,6 +119,84 @@ Note : Cette phase sera reportée car elle nécessite une infrastructure serveur
 - [ ] Tests de production
 - [ ] Déploiement sur les stores
 
+## Tests Automatisés
+
+### Configuration des Tests
+
+Le projet utilise Jest et React Native Testing Library pour les tests automatisés. La configuration est la suivante :
+
+```javascript
+// jest.config.js
+module.exports = {
+  preset: 'react-native',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  testEnvironment: 'jsdom',
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+  },
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
+  transformIgnorePatterns: [
+    'node_modules/(?!(react-native|@react-native|@react-navigation)/)',
+  ],
+  testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
+};
+```
+
+### Commandes de Test
+
+Pour exécuter les tests, vous pouvez utiliser les commandes suivantes :
+
+```bash
+# Lancer tous les tests
+npm test
+
+# Lancer les tests en mode watch (relance automatique lors des modifications)
+npm run test:watch
+
+# Lancer les tests avec rapport de couverture
+npm run test:coverage
+```
+
+### Tests de Vérification d'Environnement
+
+Le projet inclut des tests automatiques pour vérifier que l'environnement de développement est correctement configuré :
+
+1. **Tests Node.js** (`__tests__/node-version.test.ts`)
+   - Vérifie que la version de Node.js est compatible (≥ 18)
+   - Affiche la version actuelle de Node.js
+
+2. **Tests des Dépendances** (`__tests__/environment.test.ts`)
+   - Vérifie la présence et les versions des dépendances principales
+   - Vérifie les dépendances React et React Native
+   - Vérifie les dépendances de test
+   - Affiche les versions des packages principaux
+
+3. **Tests de Configuration** (`__tests__/App.test.tsx`)
+   - Vérifie la configuration de base de React
+   - Vérifie les dépendances de navigation
+   - Vérifie les dépendances Firebase
+
+### Bonnes Pratiques
+
+1. **Exécution Régulière** :
+   - Lancez les tests après chaque changement d'environnement
+   - Exécutez les tests avant chaque commit important
+   - Vérifiez les tests lors du passage d'un ordinateur à l'autre
+
+2. **Maintenance** :
+   - Mettez à jour les versions attendues dans les tests lorsque vous mettez à jour les dépendances
+   - Ajoutez de nouveaux tests lors de l'ajout de nouvelles dépendances
+   - Gardez les tests à jour avec les changements de configuration
+
+3. **Dépannage** :
+   Si les tests échouent :
+   - Vérifiez que toutes les dépendances sont installées (`npm install`)
+   - Vérifiez que les versions de Node.js et npm sont correctes
+   - Consultez les logs de test pour des informations détaillées
+
 ## Notes de Développement
 
 ### Stack Technique
