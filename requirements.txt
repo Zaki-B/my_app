@@ -1,0 +1,41 @@
+# Dépendances principales
+expo-cli@6.3.10
+react-native@0.72.6
+react@18.2.0
+typescript@5.3.3
+
+# Navigation
+@react-navigation/native@6.1.9
+@react-navigation/native-stack@6.9.17
+@react-navigation/bottom-tabs@6.5.11
+react-native-screens@3.29.0
+react-native-safe-area-context@4.8.2
+
+# Base de données et stockage
+expo-sqlite@11.3.3
+@react-native-async-storage/async-storage@1.21.0
+
+# Cartographie et Localisation
+react-native-maps@1.10.0
+expo-location@16.3.0
+
+# Tests et développement
+jest@29.7.0
+@testing-library/react-native@12.4.3
+@testing-library/jest-native@5.4.3
+@types/jest@29.5.11
+babel-jest@29.7.0
+ts-jest@29.1.1
+@babel/core@7.23.7
+@babel/preset-typescript@7.23.3
+@babel/preset-env@7.23.7
+
+# Types
+@types/react@18.2.47
+@types/react-native@0.72.8
+
+# Outils de développement
+eslint@8.56.0
+@typescript-eslint/eslint-plugin@6.18.1
+@typescript-eslint/parser@6.18.1
+prettier@3.1.1 
