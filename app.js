@@ -1,7 +1,8 @@
+import { registerRootComponent } from 'expo';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-export default function App() {
+function App() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>BeKind App</Text>
@@ -20,4 +21,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
   },
-}); 
+});
+
+export default registerRootComponent(App); 

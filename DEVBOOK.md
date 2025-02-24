@@ -15,10 +15,13 @@
 ### A. Mise en place de l'environnement de développement
 - [x] Configuration de React Native
 - [x] Configuration de TypeScript
-- [x] Installation des dépendances principales (React Navigation, Maps)
+- [x] Installation des dépendances principales
+  - [x] React Navigation
+  - [x] React Native Maps
+  - [x] Expo
+  - [x] React Native Web (support web)
 - [ ] Configuration de SQLite
 - [ ] Mise en place de Jest pour les tests
-- [x] Configuration d'Expo
 
 ### B. Architecture initiale 🟡
 - [x] Structure des dossiers
@@ -32,19 +35,25 @@
   - [x] `/src/types`
 - [x] Configuration des types TypeScript
 - [ ] Mise en place de l'intégration continue (CI/CD)
-- [x] Configuration du point d'entrée App.tsx
+- [x] Configuration du point d'entrée app.js
 
-### C. Composants de base 🟡
-- [x] Structure de navigation
-  - [x] Bottom Tab Navigator
-  - [x] Stack Navigator
-- [x] Écrans principaux
-  - [x] HomeScreen
-  - [x] ProfileScreen
-  - [x] CreateNeedScreen
-- [x] Composants réutilisables
-  - [x] InteractiveMap (structure)
-  - [x] InteractiveMap (implémentation)
+### C. Configuration des fichiers de base 🟢
+- [x] package.json
+- [x] app.json
+- [x] babel.config.js
+- [x] tsconfig.json
+- [x] .gitignore
+
+### D. Versions des dépendances principales
+```json
+{
+  "expo": "^52.0.0",
+  "react": "^18.3.1",
+  "react-native": "^0.76.7",
+  "react-dom": "^18.2.0",
+  "react-native-web": "^0.19.13"
+}
+```
 
 ## 2. Phase 1 : Authentification et Profil Utilisateur ⚪
 
@@ -267,6 +276,26 @@ Tables principales :
 | $(date) | Changement de Firebase vers SQLite pour simplicité | 🟢 |
 | $(date) | Migration vers Expo pour faciliter le développement | 🟢 |
 | 24/02/2024 | Configuration d'Expo et restructuration du point d'entrée | 🟢 |
+| 24/02/2024 | Ajout du support web et configuration de base | 🟢 |
+
+## Structure actuelle du projet
+```
+my_app/
+├── app.js                 # Point d'entrée principal
+├── app.json              # Configuration Expo
+├── babel.config.js       # Configuration Babel
+├── tsconfig.json         # Configuration TypeScript
+├── package.json          # Dépendances et scripts
+├── src/                  # Code source
+│   ├── components/       # Composants réutilisables
+│   ├── screens/         # Écrans de l'application
+│   ├── navigation/      # Configuration de la navigation
+│   ├── services/        # Services (API, base de données)
+│   ├── utils/           # Utilitaires
+│   ├── assets/         # Ressources statiques
+│   └── types/          # Types TypeScript
+└── .gitignore           # Configuration Git
+```
 
 ## Prochaines étapes prioritaires
 
@@ -286,37 +315,29 @@ Tables principales :
 
 ## Notes techniques importantes
 
-### Configuration Expo actuelle
+### Scripts disponibles
 ```json
 {
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
-  }
+  "start": "expo start --clear",
+  "android": "expo start --android",
+  "ios": "expo start --ios",
+  "web": "expo start --web"
 }
 ```
 
-### Structure du point d'entrée
-```typescript
-// App.tsx (racine)
-import App from './src/App';
-export default App;
-
-// src/App.tsx
+### Point d'entrée (app.js)
+```javascript
+import { registerRootComponent } from 'expo';
 import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Navigation from './navigation';
+import { View, Text, StyleSheet } from 'react-native';
 
-const App = () => {
+function App() {
   return (
-    <SafeAreaProvider>
-      <Navigation />
-    </SafeAreaProvider>
+    <View style={styles.container}>
+      <Text style={styles.text}>BeKind App</Text>
+    </View>
   );
-};
+}
 
-export default App;
+export default registerRootComponent(App);
 ``` 
