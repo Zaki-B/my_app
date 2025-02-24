@@ -18,6 +18,7 @@
 - [x] Installation des dépendances principales (React Navigation, Maps)
 - [ ] Configuration de SQLite
 - [ ] Mise en place de Jest pour les tests
+- [x] Configuration d'Expo
 
 ### B. Architecture initiale 🟡
 - [x] Structure des dossiers
@@ -31,6 +32,7 @@
   - [x] `/src/types`
 - [x] Configuration des types TypeScript
 - [ ] Mise en place de l'intégration continue (CI/CD)
+- [x] Configuration du point d'entrée App.tsx
 
 ### C. Composants de base 🟡
 - [x] Structure de navigation
@@ -257,10 +259,64 @@ Tables principales :
 | Date | Description | Statut |
 |------|-------------|--------|
 | - | Création du DEVBOOK | 🟢 |
-| $(date) | Structure initiale du projet | 🟡 |
+| $(date) | Structure initiale du projet | 🟢 |
 | $(date) | Configuration de la navigation | 🟢 |
 | $(date) | Création des écrans de base | 🟢 |
 | $(date) | Installation des dépendances principales | 🟢 |
 | $(date) | Implémentation de la carte interactive et création de besoins | 🟢 |
 | $(date) | Changement de Firebase vers SQLite pour simplicité | 🟢 |
-| $(date) | Migration vers Expo pour faciliter le développement | 🟡 | 
+| $(date) | Migration vers Expo pour faciliter le développement | 🟢 |
+| 24/02/2024 | Configuration d'Expo et restructuration du point d'entrée | 🟢 |
+
+## Prochaines étapes prioritaires
+
+1. **Configuration de SQLite**
+   ```bash
+   npx expo install expo-sqlite
+   ```
+
+2. **Mise en place des tests**
+   - Configurer Jest avec Expo
+   - Créer les premiers tests unitaires
+
+3. **Développement des fonctionnalités principales**
+   - Implémenter l'authentification locale
+   - Finaliser la carte interactive
+   - Développer le système de besoins
+
+## Notes techniques importantes
+
+### Configuration Expo actuelle
+```json
+{
+  "main": "node_modules/expo/AppEntry.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  }
+}
+```
+
+### Structure du point d'entrée
+```typescript
+// App.tsx (racine)
+import App from './src/App';
+export default App;
+
+// src/App.tsx
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Navigation from './navigation';
+
+const App = () => {
+  return (
+    <SafeAreaProvider>
+      <Navigation />
+    </SafeAreaProvider>
+  );
+};
+
+export default App;
+``` 
