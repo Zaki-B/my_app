@@ -1,7 +1,9 @@
-import React from 'react';
-import { StyleSheet, View, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Platform, Text, Pressable, TouchableOpacity } from 'react-native';
 import { Need } from '../../types';
 import { Map as PigeonMap, Marker as PigeonMarker } from 'pigeon-maps';
+import * as Location from 'expo-location';
+import { Ionicons } from '@expo/vector-icons';
 
 interface InteractiveMapProps {
   needs: Need[];
@@ -17,6 +19,28 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   onNeedPress,
   onMapLongPress,
 }) => {
+  const [selectedNeed, setSelectedNeed] = useState<Need | null>(null);
+  const [userLocation, setUserLocation] = useState<{ latitude: number; longitude: number } | null>(null);
+
+  const requestLocationPermission = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status === 'granted') {
+        const location = await Location.getCurrentPositionAsync({});
+        setUserLocation({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        });
+      }
+    } catch (err) {
+      console.warn('Erreur lors de la récupération de la position:', err);
+    }
+  };
+
+  const handleLocatePress = () => {
+    requestLocationPermission();
+  };
+
   if (Platform.OS === 'web') {
     return (
       <View style={styles.container}>
@@ -45,8 +69,16 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
   }
 
   // Import dynamique de react-native-maps uniquement pour mobile
-  const NativeMap = require('react-native-maps').default;
-  const NativeMarker = require('react-native-maps').Marker;
+  const { default: NativeMap, Marker: NativeMarker, Callout } = require('react-native-maps');
+
+  const handleMarkerPress = (need: Need) => {
+    setSelectedNeed(need);
+    onNeedPress?.(need);
+  };
+
+  const handleMapPress = () => {
+    setSelectedNeed(null);
+  };
 
   return (
     <View style={styles.container}>
@@ -58,18 +90,63 @@ const InteractiveMap: React.FC<InteractiveMapProps> = ({
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }}
+        region={userLocation ? {
+          latitude: userLocation.latitude,
+          longitude: userLocation.longitude,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        } : undefined}
         onLongPress={(e: any) => onMapLongPress?.(e.nativeEvent.coordinate)}
+        onPress={handleMapPress}
         showsUserLocation
         showsMyLocationButton
+        showsCompass
+        showsScale
+        showsTraffic
+        loadingEnabled
+        toolbarEnabled
+        zoomEnabled
+        rotateEnabled
+        mapType="hybrid"
+        showsBuildings
+        showsIndoors
+        showsPointsOfInterest
+        userInterfaceStyle="light"
+        clusterColor="#2196F3"
+        clusterTextColor="#ffffff"
+        minZoomLevel={5}
+        maxZoomLevel={20}
       >
         {needs.map((need) => (
           <NativeMarker
             key={need.id}
             coordinate={need.location}
-            onPress={() => onNeedPress?.(need)}
-          />
+            onPress={() => handleMarkerPress(need)}
+            tracksViewChanges={false}
+            calloutAnchor={{ x: 0.5, y: 0 }}
+            pinColor={selectedNeed?.id === need.id ? '#2196F3' : '#FF5252'}
+          >
+            <Callout tooltip>
+              <View style={styles.calloutContainer}>
+                <Text style={styles.calloutTitle}>{need.title}</Text>
+                <Text style={styles.calloutDescription}>{need.description}</Text>
+                <Pressable 
+                  style={styles.calloutButton}
+                  onPress={() => onNeedPress?.(need)}
+                >
+                  <Text style={styles.calloutButtonText}>Voir plus</Text>
+                </Pressable>
+              </View>
+            </Callout>
+          </NativeMarker>
         ))}
       </NativeMap>
+      <TouchableOpacity 
+        style={styles.locateButton}
+        onPress={handleLocatePress}
+      >
+        <Ionicons name="locate" size={24} color="#2196F3" />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -81,6 +158,55 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  calloutContainer: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 12,
+    maxWidth: 200,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  calloutTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 4,
+    color: '#333',
+  },
+  calloutDescription: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  calloutButton: {
+    backgroundColor: '#2196F3',
+    padding: 8,
+    borderRadius: 4,
+    alignItems: 'center',
+  },
+  calloutButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  locateButton: {
+    position: 'absolute',
+    right: 16,
+    bottom: 32,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    width: 50,
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
 });
 

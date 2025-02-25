@@ -136,26 +136,6 @@ Note : Cette phase sera reportée car elle nécessite une infrastructure serveur
 
 Le projet utilise Jest et React Native Testing Library pour les tests automatisés. La configuration est la suivante :
 
-```javascript
-// jest.config.js
-module.exports = {
-  preset: 'react-native',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  testEnvironment: 'jsdom',
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
-  },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-  },
-  transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation)/)',
-  ],
-  testPathIgnorePatterns: ['/node_modules/', '/android/', '/ios/'],
-  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
-};
-```
-
 ### Commandes de Test
 
 Pour exécuter les tests, vous pouvez utiliser les commandes suivantes :

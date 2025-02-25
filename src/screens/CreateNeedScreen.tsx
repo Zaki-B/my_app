@@ -6,6 +6,9 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation';
@@ -18,65 +21,101 @@ const CreateNeedScreen: React.FC<Props> = ({ navigation, route }) => {
 
   const [formData, setFormData] = useState<Partial<Need>>({
     type: 'urgence',
+    title: '',
     description: '',
     location: coordinates || { latitude: 0, longitude: 0 },
   });
 
   const handleSubmit = async () => {
+    if (!formData.title?.trim()) {
+      Alert.alert(
+        'Champ requis',
+        'Veuillez donner un titre à votre signalement.',
+        [{ text: 'OK', style: 'default' }]
+      );
+      return;
+    }
+
+    if (!formData.description?.trim()) {
+      Alert.alert(
+        'Champ requis',
+        'Veuillez ajouter une description à votre signalement.',
+        [{ text: 'OK', style: 'default' }]
+      );
+      return;
+    }
+
     // TODO: Implémenter la création dans Firebase
     console.log('Creating need:', formData);
     navigation.goBack();
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Signaler un besoin</Text>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView style={styles.scrollView}>
+        <View style={styles.content}>
+          <Text style={styles.title}>Signaler un besoin</Text>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Type de besoin</Text>
-          <View style={styles.typeButtons}>
-            {(['urgence', 'collecte', 'hébergement'] as const).map((type) => (
-              <TouchableOpacity
-                key={type}
-                style={[
-                  styles.typeButton,
-                  formData.type === type && styles.typeButtonActive,
-                ]}
-                onPress={() => setFormData({ ...formData, type })}
-              >
-                <Text
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Type de besoin</Text>
+            <View style={styles.typeButtons}>
+              {(['urgence', 'collecte', 'hébergement'] as const).map((type) => (
+                <TouchableOpacity
+                  key={type}
                   style={[
-                    styles.typeButtonText,
-                    formData.type === type && styles.typeButtonTextActive,
+                    styles.typeButton,
+                    formData.type === type && styles.typeButtonActive,
                   ]}
+                  onPress={() => setFormData({ ...formData, type })}
                 >
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </Text>
-              </TouchableOpacity>
-            ))}
+                  <Text
+                    style={[
+                      styles.typeButtonText,
+                      formData.type === type && styles.typeButtonTextActive,
+                    ]}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
 
-        <View style={styles.formGroup}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.input}
-            multiline
-            numberOfLines={4}
-            value={formData.description}
-            onChangeText={(description) =>
-              setFormData({ ...formData, description })
-            }
-            placeholder="Décrivez le besoin en détail..."
-          />
-        </View>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Titre</Text>
+            <TextInput
+              style={styles.input}
+              value={formData.title}
+              onChangeText={(title) => setFormData({ ...formData, title })}
+              placeholder="Donnez un titre court et clair..."
+              maxLength={50}
+            />
+          </View>
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Créer le signalement</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Description</Text>
+            <TextInput
+              style={[styles.input, styles.textArea]}
+              multiline
+              numberOfLines={4}
+              value={formData.description}
+              onChangeText={(description) =>
+                setFormData({ ...formData, description })
+              }
+              placeholder="Décrivez le besoin en détail..."
+              textAlignVertical="top"
+            />
+          </View>
+
+          <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
+            <Text style={styles.submitButtonText}>Créer le signalement</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -84,6 +123,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
+  },
+  scrollView: {
+    flex: 1,
   },
   content: {
     padding: 20,
@@ -109,6 +151,9 @@ const styles = StyleSheet.create({
     padding: 12,
     fontSize: 16,
     backgroundColor: '#f9f9f9',
+  },
+  textArea: {
+    minHeight: 100,
     textAlignVertical: 'top',
   },
   typeButtons: {

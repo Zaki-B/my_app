@@ -1,6 +1,7 @@
 // Types pour les besoins signalés
 export interface Need {
   id: string;
+  title: string;
   type: 'urgence' | 'collecte' | 'hébergement';
   description: string;
   location: {
