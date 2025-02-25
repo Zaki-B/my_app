@@ -9,12 +9,22 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bekind.app",
+      "config": {
+        "googleMapsApiKey": "VOTRE_CLE_API_IOS"
+      }
     },
     "android": {
+      "package": "com.bekind.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "VOTRE_CLE_API_ANDROID"
+        }
+      },
       "permissions": [
-        "ACCESS_FINE_LOCATION",
-        "ACCESS_COARSE_LOCATION"
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION"
       ]
     },
     "plugins": [
